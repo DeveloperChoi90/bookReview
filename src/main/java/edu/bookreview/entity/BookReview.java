@@ -41,16 +41,16 @@ public class BookReview extends Timestamped {
     private Integer likeCount;
 
     @Column(nullable = false)
-    private Integer rank;
+    private Integer ranking;
 
     @OneToMany(mappedBy = "bookReview", cascade = CascadeType.ALL)
     private List<LikeBookReview> likeBookReviews = new ArrayList<>();
 
     @Builder
-    public BookReview(User user, String title, String bookBuyUrl, String bookImageUrl, String content, Integer likeCount, Integer rank) {
+    public BookReview(User user, String title, String bookBuyUrl, String bookImageUrl, String content, Integer likeCount, Integer ranking) {
         Assert.hasText(title, "title must not be empty");
         if (user == null) throw new IllegalArgumentException("user is null");
-        if (rank == null) throw new IllegalArgumentException("rank is null");
+        if (ranking == null) throw new IllegalArgumentException("rank is null");
 
         this.user = user;
         this.title = title;
@@ -58,7 +58,7 @@ public class BookReview extends Timestamped {
         this.bookImageUrl = bookImageUrl;
         this.content = content;
         this.likeCount = likeCount;
-        this.rank = rank;
+        this.ranking = ranking;
     }
 
     public void addBookReview(LikeBookReview likeBookReview){
@@ -66,16 +66,15 @@ public class BookReview extends Timestamped {
         likeBookReview.addBookReview(this);
     }
 
-    public void updateBookReview(User user, String title, String bookBuyUrl, String bookImageUrl, String content, Integer likeCount, Integer rank){
+    public void updateBookReview(User user, String title, String bookBuyUrl, String bookImageUrl, String content, Integer likeCount, Integer ranking){
         this.user = user;
         this.title = title;
         this.bookBuyUrl = bookBuyUrl;
         this.bookImageUrl = bookImageUrl;
         this.content = content;
         this.likeCount = likeCount;
-        this.rank = rank;
+        this.ranking = ranking;
     }
-
 
     public void addImgUrl(String bookImageUrl){
         this.bookImageUrl = bookImageUrl;

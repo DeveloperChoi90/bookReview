@@ -33,9 +33,9 @@ public class BookReviewService {
     // TODO: 2022/06/14
     // 수정 기능 작성
     @Transactional
-    public String editBookReview(PrincipalDetails principalDetails, Long reviewid, ReviewEditRequestDto reviewEditRequestDto) {
-        BookReview bookReview = bookReviewRepository.findByIdAndUser(reviewid, principalDetails.getUser())
-                .orElseThrow(() -> new NullPointerException("You are not the author of this post"));
+    public void editBookReview(PrincipalDetails principalDetails, Long reviewId, ReviewEditRequestDto reviewEditRequestDto) {
+        BookReview bookReview = bookReviewRepository.findByIdAndUser(reviewId, principalDetails.getUser())
+                .orElseThrow(() -> new IllegalArgumentException("You are not the author of this post"));
 
         bookReview.updateBookReview(bookReview.getUser()
                 , reviewEditRequestDto.getTitle()
@@ -43,18 +43,17 @@ public class BookReviewService {
                 , bookReview.getBookImageUrl()
                 , reviewEditRequestDto.getContent()
                 , bookReview.getLikeCount()
-                , reviewEditRequestDto.getRank()
+                , reviewEditRequestDto.getRanking()
                 );
 
         // findBy 로 영속성 컨텍스트에 올린 후 변경이 발생하면 쓰기 지연 저장소에 저장된 entity가 @Transactional 에 의해 메소드가 끝난 후 commit이 일어난다
         //bookReviewRepository.save(bookReview);
-        return "edit complete";
     }
 
     @Transactional
     public void deleteBookReview(PrincipalDetails principalDetails, Long bookReviewId) {
         BookReview bookReview = bookReviewRepository.findByIdAndUser(bookReviewId, principalDetails.getUser()).orElseThrow(
-                () -> new NullPointerException("You are not the author of this post")
+                () -> new IllegalArgumentException("You are not the author of this post")
         );
 
 //        s3Util.deleteS3File(bookReview.getBookImageUrl());

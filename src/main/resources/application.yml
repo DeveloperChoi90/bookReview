@@ -34,11 +34,11 @@ logging:
 cloud:
   aws:
     credentials:
-      access-key: AKIAYXSIBXB7MDBKBOWN
-      secret-key: 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
+      access-key:
+      secret-key:
     stack:
       auto: false
     region:
       static: ap-northeast-2
     s3:
-      bucket: choisbucket
+      bucket:

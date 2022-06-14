@@ -6,7 +6,6 @@ import edu.bookreview.entity.User;
 import edu.bookreview.repository.BookReviewRepository;
 import edu.bookreview.repository.LikeBookReviewRepository;
 import edu.bookreview.security.PrincipalDetails;
-import edu.bookreview.util.UpdateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,7 @@ public class LikeService {
 
     private final BookReviewRepository bookReviewRepository;
     private final LikeBookReviewRepository likeBookReviewRepository;
-    private final UpdateUtil updateUtil;
+
 
     // TODO: 2022/06/13
     // 좋아요 기능 추가
@@ -43,10 +42,19 @@ public class LikeService {
             bookReview.addBookReview(firstLike);
             totalLikeCnt = bookReview.getLikeCount() + 1;
 
-            updateUtil.updateLikeCnt(review_id, totalLikeCnt);
+            updateLikeCnt(review_id, totalLikeCnt);
             return true;
         }
         return false;
+    }
+
+    public void updateLikeCnt(Long bookReviewId, Integer totalLikeCnt){
+        bookReviewRepository.updateLikeCnt(bookReviewId, totalLikeCnt);
+    }
+
+    // 게시글에 따른 유저의 좋아요 상태 업데이트
+    public void updateLikeStatus(Long likeBookReviewId, boolean status){
+        likeBookReviewRepository.updateLikeStatus(likeBookReviewId, status);
     }
 
     public boolean getStatus(User user, Long reviewId){

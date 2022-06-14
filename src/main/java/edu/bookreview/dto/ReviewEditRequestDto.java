@@ -8,10 +8,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ReviewEditRequestDto {
 
-    private final String bookBuyUrl;
     private final String title;
+    private final String bookBuyUrl;
     private final String content;
-    private final Integer rank;
+    private final Integer ranking;
 
     public BookReview toEntity(BookReview bookReview){
         return BookReview.builder()
@@ -21,7 +21,7 @@ public class ReviewEditRequestDto {
                 .content(this.content)
                 .bookImageUrl(bookReview.getBookImageUrl())
                 .likeCount(bookReview.getLikeCount())
-                .rank(this.rank)
+                .ranking(this.ranking)
                 .build();
     }
 }
