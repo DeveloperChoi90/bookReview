@@ -21,7 +21,7 @@ public class ReviewEditRequestDto {
                 .content(this.content)
                 .bookImageUrl(bookReview.getBookImageUrl())
                 .likeCount(bookReview.getLikeCount())
-                .ranking(this.ranking)
+                .rank(this.ranking)
                 .build();
     }
 }

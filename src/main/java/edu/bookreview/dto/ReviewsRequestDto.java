@@ -34,7 +34,7 @@ public class ReviewsRequestDto {
                 .title(this.title)
                 .bookBuyUrl(this.bookBuyUrl)
                 .content(this.content)
-                .ranking(this.rank)
+                .rank(this.rank)
                 .build();
     }
 }

@@ -88,5 +88,4 @@ public class GlobalExceptionHandler {
         String path = request.getRequestURI();
         return ErrorResponse.of(path, ErrorCode.INTERNAL_SERVER_ERROR);
     }
-
 }
