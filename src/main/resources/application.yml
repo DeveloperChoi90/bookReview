@@ -34,11 +34,11 @@ logging:
 cloud:
   aws:
     credentials:
-      access-key:
-      secret-key:
+      access-key: # IAM Access-key
+      secret-key: # IAM Secret-key
     stack:
       auto: false
     region:
       static: ap-northeast-2
     s3:
-      bucket:
+      bucket: # S3 bucket name

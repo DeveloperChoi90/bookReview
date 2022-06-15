@@ -43,7 +43,7 @@ public class LikeBookReview extends Timestamped{
         this.bookReview = bookReview;
     }
 
-//    public void changStatus()
+    //    public void changStatus()
     // 영속화 되기전에 실행
     @PersistenceContext
     public void initLikeStatus() {
