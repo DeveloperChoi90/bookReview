@@ -14,7 +14,7 @@ spring:
 #      path: /h2-console
 
   datasource:
-    url: jdbc:mysql://db-chois.cngmkj2y4q18.ap-northeast-2.rds.amazonaws.com:3306/database_chois   #h2:mem:testdb
+    url:  # jdbc:mysql:{rds endpoint}:3306/init db name   #h2:mem:testdb
     driver-class-name: com.mysql.cj.jdbc.Driver #org.h2.Driver
     username:  # aws ec2 admin name #sa
     password:  # aws ec2 password
