@@ -33,7 +33,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         // TODO: 2022-06-13 배포 전 프론트 엔드 서버 URL 로 변경
-        corsConfiguration.addAllowedOrigin(CorsConfiguration.ALL); // 허용할 URL
+//        corsConfiguration.addAllowedOrigin(CorsConfiguration.ALL); // 허용할 URL
+        corsConfiguration.addAllowedOriginPattern(CorsConfiguration.ALL); // CorsConfiguration.ALL 와 setAllowCredentials(true) 와 공존하기 위해
         corsConfiguration.addAllowedHeader(CorsConfiguration.ALL); // 허용할 Header
         corsConfiguration.addAllowedMethod(CorsConfiguration.ALL); // 허용할 Method
         corsConfiguration.setAllowCredentials(true); // 인증 정보 설정
