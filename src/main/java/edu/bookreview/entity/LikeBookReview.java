@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(exclude = {"id"})
-public class LikeBookReview extends Timestamped{
+public class LikeBookReview extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,13 +33,13 @@ public class LikeBookReview extends Timestamped{
     private Boolean likeStatus; // true 일 때가 좋아요를 하지 않은 상태
 
     @Builder
-    public LikeBookReview(User user, BookReview bookReview, boolean likeStatus){
+    public LikeBookReview(User user, BookReview bookReview, boolean likeStatus) {
         this.user = user;
         this.bookReview = bookReview;
         this.likeStatus = likeStatus;
     }
 
-    public void addBookReview(BookReview bookReview){
+    public void addBookReview(BookReview bookReview) {
         this.bookReview = bookReview;
     }
 
@@ -47,6 +47,6 @@ public class LikeBookReview extends Timestamped{
     // 영속화 되기전에 실행
     @PersistenceContext
     public void initLikeStatus() {
-        if(this.likeStatus) this.likeStatus = true;
+        if (this.likeStatus) this.likeStatus = true;
     }
 }

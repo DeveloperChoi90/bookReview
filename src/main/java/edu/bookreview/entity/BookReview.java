@@ -13,7 +13,8 @@ import java.util.List;
 @ToString(exclude = {"id"})
 public class BookReview extends Timestamped {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "REVIEW_ID")
     private Long id;
 
@@ -61,12 +62,12 @@ public class BookReview extends Timestamped {
         this.ranking = rank;
     }
 
-    public void addBookReview(LikeBookReview likeBookReview){
+    public void addBookReview(LikeBookReview likeBookReview) {
         likeBookReviews.add(likeBookReview);
         likeBookReview.addBookReview(this);
     }
 
-    public void updateBookReview(User user, String title, String bookBuyUrl, String bookImageUrl, String content, Integer likeCount, Integer rank){
+    public void updateBookReview(User user, String title, String bookBuyUrl, String bookImageUrl, String content, Integer likeCount, Integer rank) {
         this.user = user;
         this.title = title;
         this.bookBuyUrl = bookBuyUrl;
@@ -76,10 +77,11 @@ public class BookReview extends Timestamped {
         this.ranking = rank;
     }
 
-    public void addImgUrl(String bookImageUrl){
+    public void addImgUrl(String bookImageUrl) {
         this.bookImageUrl = bookImageUrl;
     }
-    public void updateLikeCnt(Integer likeCount){
+
+    public void updateLikeCnt(Integer likeCount) {
         this.likeCount = likeCount;
     }
 

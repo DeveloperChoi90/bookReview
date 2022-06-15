@@ -41,7 +41,6 @@ public class S3Util {
                     new PutObjectRequest(bucket, imgFileName, file.getInputStream(), objectMetadata)
                             .withCannedAcl(CannedAccessControlList.PublicRead));  // S3 업로드
 //            log.info("content-type : {}, getInputStream : {}", imgFile.getFile().getContentType(), imgFile.getFile().getInputStream());
-
         } catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "File upload is failed.");
         }

@@ -43,7 +43,7 @@ public class BookReviewService {
                 , bookReview.getBookImageUrl()
                 , reviewEditRequestDto.getContent()
                 , bookReview.getLikeCount()
-                , reviewEditRequestDto.getRanking()
+                , reviewEditRequestDto.getRank()
                 );
 
         // findBy 로 영속성 컨텍스트에 올린 후 변경이 발생하면 쓰기 지연 저장소에 저장된 entity가 @Transactional 에 의해 메소드가 끝난 후 commit이 일어난다
