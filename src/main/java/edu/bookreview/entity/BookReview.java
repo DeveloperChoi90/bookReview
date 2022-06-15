@@ -47,10 +47,10 @@ public class BookReview extends Timestamped {
     private List<LikeBookReview> likeBookReviews = new ArrayList<>();
 
     @Builder
-    public BookReview(User user, String title, String bookBuyUrl, String bookImageUrl, String content, Integer likeCount, Integer ranking) {
+    public BookReview(User user, String title, String bookBuyUrl, String bookImageUrl, String content, Integer likeCount, Integer rank) {
         Assert.hasText(title, "title must not be empty");
         if (user == null) throw new IllegalArgumentException("user is null");
-        if (ranking == null) throw new IllegalArgumentException("rank is null");
+        if (rank == null) throw new IllegalArgumentException("rank is null");
 
         this.user = user;
         this.title = title;
@@ -58,7 +58,7 @@ public class BookReview extends Timestamped {
         this.bookImageUrl = bookImageUrl;
         this.content = content;
         this.likeCount = likeCount;
-        this.ranking = ranking;
+        this.ranking = rank;
     }
 
     public void addBookReview(LikeBookReview likeBookReview){
@@ -66,14 +66,14 @@ public class BookReview extends Timestamped {
         likeBookReview.addBookReview(this);
     }
 
-    public void updateBookReview(User user, String title, String bookBuyUrl, String bookImageUrl, String content, Integer likeCount, Integer ranking){
+    public void updateBookReview(User user, String title, String bookBuyUrl, String bookImageUrl, String content, Integer likeCount, Integer rank){
         this.user = user;
         this.title = title;
         this.bookBuyUrl = bookBuyUrl;
         this.bookImageUrl = bookImageUrl;
         this.content = content;
         this.likeCount = likeCount;
-        this.ranking = ranking;
+        this.ranking = rank;
     }
 
     public void addImgUrl(String bookImageUrl){

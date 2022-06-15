@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 @ToString
 public class ReviewsRequestDto {
 
-    private final Integer ranking;
+    private final Integer rank;
     private final String title;
     private final String bookBuyUrl;
     // spring 에서 사용하는 파일 타입
@@ -19,9 +19,9 @@ public class ReviewsRequestDto {
     private final String content;
 
     @Builder
-    public ReviewsRequestDto(Integer ranking, String title, String bookBuyUrl, MultipartFile file, String content){
+    public ReviewsRequestDto(Integer rank, String title, String bookBuyUrl, MultipartFile file, String content){
 
-        this.ranking = ranking;
+        this.rank = rank;
         this.title = title;
         this.bookBuyUrl = bookBuyUrl;
         this.file = file;
@@ -32,9 +32,9 @@ public class ReviewsRequestDto {
         return BookReview.builder()
                 .user(user)
                 .title(this.title)
-                .ranking(this.ranking)
                 .bookBuyUrl(this.bookBuyUrl)
                 .content(this.content)
+                .ranking(this.rank)
                 .build();
     }
 }
