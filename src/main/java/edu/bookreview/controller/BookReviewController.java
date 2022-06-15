@@ -19,6 +19,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 
 @Slf4j
 @RestController
@@ -52,7 +54,7 @@ public class BookReviewController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/bookreviews")
     public void writeBookReview(@AuthenticationPrincipal PrincipalDetails principalDetails
-            , ReviewsRequestDto reviewsRequestDto) {
+            , @Valid ReviewsRequestDto reviewsRequestDto) {
         bookReviewService.writeBookReview(reviewsRequestDto.toEntity(principalDetails.getUser()), reviewsRequestDto.getFile());
     }
 
