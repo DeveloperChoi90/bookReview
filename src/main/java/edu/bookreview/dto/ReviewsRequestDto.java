@@ -14,20 +14,20 @@ import javax.validation.constraints.NotNull;
 @ToString
 public class ReviewsRequestDto {
 
-    @NotBlank
+    @NotBlank(message = "Please input the rank of this post")
     private final Integer rank;
 
-    @NotBlank
+    @NotBlank(message = "You must write the title of this Posting.")
     private final String title;
 
-    @NotBlank
+    @NotBlank(message = "You must need to the url information of this book")
     private final String bookBuyUrl;
     // spring 에서 사용하는 파일 타입
 
-    @NotNull
+    @NotNull(message = "Please select upload file.")
     private final MultipartFile file;
 
-    @NotBlank
+    @NotBlank(message = "Please write your content.")
     private final String content;
 
     @Builder

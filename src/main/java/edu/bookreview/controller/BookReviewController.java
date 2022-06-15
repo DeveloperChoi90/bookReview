@@ -54,7 +54,7 @@ public class BookReviewController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/bookreviews")
     public void writeBookReview(@AuthenticationPrincipal PrincipalDetails principalDetails
-            , @Valid ReviewsRequestDto reviewsRequestDto) {
+            , ReviewsRequestDto reviewsRequestDto) {
         bookReviewService.writeBookReview(reviewsRequestDto.toEntity(principalDetails.getUser()), reviewsRequestDto.getFile());
     }
 

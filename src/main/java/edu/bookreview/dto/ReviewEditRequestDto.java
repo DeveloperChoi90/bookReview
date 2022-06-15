@@ -10,17 +10,15 @@ import javax.validation.constraints.NotBlank;
 @RequiredArgsConstructor
 public class ReviewEditRequestDto {
 
-    @NotBlank
     private final String title;
 
-    @NotBlank
+    @NotBlank(message = "Please input the url information of the book you want to change.")
     private final String bookBuyUrl;
 
-    @NotBlank
+    @NotBlank(message = "Please write your content to wish edit to your content before.")
     private final String content;
 
-    @NotBlank
-    private final Integer ranking;
+    private final Integer rank;
 
     public BookReview toEntity(BookReview bookReview){
         return BookReview.builder()
@@ -30,7 +28,7 @@ public class ReviewEditRequestDto {
                 .content(this.content)
                 .bookImageUrl(bookReview.getBookImageUrl())
                 .likeCount(bookReview.getLikeCount())
-                .rank(this.ranking)
+                .rank(this.rank)
                 .build();
     }
 }
