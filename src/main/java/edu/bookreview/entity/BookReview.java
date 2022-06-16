@@ -34,6 +34,7 @@ public class BookReview extends Timestamped {
     private String bookImageUrl;
 
     // 값이 비어있어도 괜찮은지?
+    @Lob  // content 길이
     @Column(nullable = false)
     private String content;
 
