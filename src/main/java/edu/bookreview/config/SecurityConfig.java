@@ -16,6 +16,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -25,6 +28,22 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PrincipalService principalService;
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        // TODO: 2022-06-13 배포 전 프론트 엔드 서버 URL 로 변경
+//        corsConfiguration.addAllowedOrigin(CorsConfiguration.ALL); // 허용할 URL
+        corsConfiguration.addAllowedOriginPattern(CorsConfiguration.ALL); // CorsConfiguration.ALL 와 setAllowCredentials(true) 와 공존하기 위해
+        corsConfiguration.addAllowedHeader(CorsConfiguration.ALL); // 허용할 Header
+        corsConfiguration.addAllowedMethod(CorsConfiguration.ALL); // 허용할 Method
+        corsConfiguration.setAllowCredentials(true); // 인증 정보 설정
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfiguration);
+        return source;
+    }
+
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -47,6 +66,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .csrf().disable()
+//                .cors().configurationSource(corsConfigurationSource())
+//                .and()
                 .sessionManagement() // Token 을 사용하면 세션을 사용할 필요가 없음.
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
@@ -55,12 +76,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterAt(checkFilter, BasicAuthenticationFilter.class);
 
         http.authorizeRequests()
-//                //test 위해서 삭제 필요
-//                .antMatchers("/api/bookreviews").permitAll()
-
-                .antMatchers("/api/signup").permitAll()
+                .antMatchers("/api/**").permitAll()
+//                .antMatchers("/images").permitAll()
+//                .antMatchers("/api/signup").permitAll()
+//                .antMatchers("/api/authentication").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
-                .anyRequest().authenticated();
+                .anyRequest().authenticated()
+        ;
     }
 }

@@ -1,22 +1,28 @@
 package edu.bookreview.controller;
 
+import edu.bookreview.dto.ReviewDetail;
 import edu.bookreview.dto.ReviewEditRequestDto;
 import edu.bookreview.dto.ReviewsRequestDto;
+import edu.bookreview.entity.BookReview;
 import edu.bookreview.security.PrincipalDetails;
 import edu.bookreview.service.BookReviewService;
 import edu.bookreview.service.LikeService;
+import edu.bookreview.service.ReviewService;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 
 @Slf4j
-@ToString
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
@@ -24,47 +30,51 @@ public class BookReviewController {
 
     private final BookReviewService bookReviewService;
     private final LikeService likeService;
+    private final ReviewService reviewService;
 
+    @GetMapping("/bookreviews")
+    public Page<ReviewDetail> getReviews(
+            @PageableDefault(size = 5, sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<BookReview> reviewPage = reviewService.getReviews(pageable);
+        return reviewPage.map(ReviewDetail::from);
+    }
 
-    // Multipart requests consist of sending data of many different types separated by a boundary as part of a single HTTP method call.
-    // @RequestPart : method argument 와 함께 요청되는 multipart request를 관리하는 어노테이션
-    // @RequestPart(value = "file", required = false) :
-    // required = true (default) 경우
-    // 쿼리 스트링에 MultipartFile imgFile 이 없을 경우, 즉 /api/bookreviews 와 같이 @RequsetPart가 적용된 필드가 없으면
-    // Bad Request, Required MultipartFile parameter 'imgFile' is not present 라는 예외를 발생
-    // required = false 주의할 점
-    // Spring이 해당 Argument 를 무시한다.
+    @GetMapping("/bookreviews/{id}")
+    public ReviewDetail getReview(@AuthenticationPrincipal PrincipalDetails principalDetails, @PathVariable Long id) {
+        BookReview review = reviewService.getReview(id)
+                .orElseThrow(() -> new IllegalArgumentException("review is not found."));
+        if (principalDetails == null) {
+            return ReviewDetail.from(review, false);
+        }
+        boolean userLikeStatus = likeService.getStatus(principalDetails.getUser(), id);
+        return ReviewDetail.from(review, userLikeStatus);
+    }
 
-    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/bookreviews")
     public void writeBookReview(@AuthenticationPrincipal PrincipalDetails principalDetails
             , ReviewsRequestDto reviewsRequestDto) {
         bookReviewService.writeBookReview(reviewsRequestDto.toEntity(principalDetails.getUser()), reviewsRequestDto.getFile());
     }
 
-    // TODO: 2022/06/14
-    // 수정 기능 작성
-    @ResponseStatus(HttpStatus.OK)
-    @PatchMapping ("/bookreviews/{id}")
-    public ResponseEntity<String> editBookReview(@AuthenticationPrincipal PrincipalDetails principalDetails
+    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
+    @PatchMapping("/bookreviews/{id}")
+    public void editBookReview(@AuthenticationPrincipal PrincipalDetails principalDetails
             , @PathVariable Long id
-            , @RequestBody ReviewEditRequestDto reviewEditRequestDto){
-        HttpHeaders headers = new HttpHeaders();
-        String msg = bookReviewService.editBookReview(principalDetails, id, reviewEditRequestDto);
-        return new ResponseEntity<String>(msg, headers, HttpStatus.valueOf(200));
+            , @RequestBody ReviewEditRequestDto reviewEditRequestDto) {
+        bookReviewService.editBookReview(principalDetails, id, reviewEditRequestDto);
     }
 
-
-    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     @DeleteMapping("/bookreviews/{id}")
-    public void deleteBookReview(@AuthenticationPrincipal PrincipalDetails principalDetails, @PathVariable Long id){
+    public void deleteBookReview(@AuthenticationPrincipal PrincipalDetails principalDetails, @PathVariable Long id) {
         bookReviewService.deleteBookReview(principalDetails, id);
     }
 
-
-    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
     @PostMapping("/bookreviews/{id}/like")
-    public boolean likeBookReview(@AuthenticationPrincipal PrincipalDetails principalDetails, @PathVariable Long id){
+    public boolean likeBookReview(@AuthenticationPrincipal PrincipalDetails principalDetails, @PathVariable Long id) {
         return likeService.likeBookReview(principalDetails, id);
     }
 }

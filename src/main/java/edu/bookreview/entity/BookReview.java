@@ -13,8 +13,9 @@ import java.util.List;
 @ToString(exclude = {"id"})
 public class BookReview extends Timestamped {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "BOOK_REVIEW_ID")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "REVIEW_ID")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -33,6 +34,7 @@ public class BookReview extends Timestamped {
     private String bookImageUrl;
 
     // 값이 비어있어도 괜찮은지?
+    @Lob  // content 길이
     @Column(nullable = false)
     private String content;
 
@@ -41,7 +43,7 @@ public class BookReview extends Timestamped {
     private Integer likeCount;
 
     @Column(nullable = false)
-    private Integer rank;
+    private Integer ranking;
 
     @OneToMany(mappedBy = "bookReview", cascade = CascadeType.ALL)
     private List<LikeBookReview> likeBookReviews = new ArrayList<>();
@@ -58,29 +60,29 @@ public class BookReview extends Timestamped {
         this.bookImageUrl = bookImageUrl;
         this.content = content;
         this.likeCount = likeCount;
-        this.rank = rank;
+        this.ranking = rank;
     }
 
-    public void addBookReview(LikeBookReview likeBookReview){
+    public void addBookReview(LikeBookReview likeBookReview) {
         likeBookReviews.add(likeBookReview);
         likeBookReview.addBookReview(this);
     }
 
-    public void updateBookReview(User user, String title, String bookBuyUrl, String bookImageUrl, String content, Integer likeCount, Integer rank){
+    public void updateBookReview(User user, String title, String bookBuyUrl, String bookImageUrl, String content, Integer likeCount, Integer rank) {
         this.user = user;
         this.title = title;
         this.bookBuyUrl = bookBuyUrl;
         this.bookImageUrl = bookImageUrl;
         this.content = content;
         this.likeCount = likeCount;
-        this.rank = rank;
+        this.ranking = rank;
     }
 
-
-    public void addImgUrl(String bookImageUrl){
+    public void addImgUrl(String bookImageUrl) {
         this.bookImageUrl = bookImageUrl;
     }
-    public void updateLikeCnt(Integer likeCount){
+
+    public void updateLikeCnt(Integer likeCount) {
         this.likeCount = likeCount;
     }
 

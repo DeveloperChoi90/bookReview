@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
@@ -15,6 +16,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collections;
 
 // 로그인 된 JWT 토큰을 매 요청마다 체크해주기 위한 필터
 @Slf4j
@@ -44,8 +46,9 @@ public class JWTCheckFilter extends BasicAuthenticationFilter {
             log.info("인증이 완료된 사용자 = {}", verifyResult.getUsername());
             UserDetails principalDetails = principalService.loadUserByUsername(verifyResult.getUsername());
 
+            // 유저 권한 설정
             UsernamePasswordAuthenticationToken userToken = new UsernamePasswordAuthenticationToken(
-                    principalDetails, null, null
+                    principalDetails, null, Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"))
             );
             // 시큐리티 컨텍스트에 principalDetails 를 저장해놓고 API 에서 사용가능...
             SecurityContextHolder.getContext().setAuthentication(userToken);

@@ -4,6 +4,9 @@ import edu.bookreview.type.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -30,6 +33,37 @@ public class GlobalExceptionHandler {
         return ErrorResponse.of(path, ErrorCode.MISSING_REQUEST_BODY);
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler
+    public ErrorResponse handleHttpRequestMethodNotSupportedException(
+            HttpRequestMethodNotSupportedException e, HttpServletRequest request) {
+
+        log.error("handleHttpRequestMethodNotSupportedException", e);
+        String path = request.getRequestURI();
+        return ErrorResponse.of(path, ErrorCode.MISSING_REQUEST_BODY);
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler
+    public ErrorResponse handleAccessDeniedException(
+            AccessDeniedException e, HttpServletRequest request) {
+
+        log.error("handleAccessDeniedException", e);
+        String path = request.getRequestURI();
+        return ErrorResponse.of(path, ErrorCode.ACCESS_DENIED);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler
+    public ErrorResponse handleIllegalArgumentException(
+            IllegalArgumentException e, HttpServletRequest request) {
+
+        log.error("handleIllegalArgumentException", e);
+        String path = request.getRequestURI();
+
+        return ErrorResponse.of(path, ErrorCode.INVALID_INPUT_VALUE);
+    }
+
     /**
      * @Valid 검증 실패시 발생하는 예외
      * -> Bean Validation 검증 실패시 발생
@@ -54,5 +88,4 @@ public class GlobalExceptionHandler {
         String path = request.getRequestURI();
         return ErrorResponse.of(path, ErrorCode.INTERNAL_SERVER_ERROR);
     }
-
 }
